@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class SpectrumDrawer : MonoBehaviour
 {
-	public AudioSource audioSource = null;
 	private RawImage rawImage = null;
 	private float[] sample;
 
@@ -16,29 +15,25 @@ public class SpectrumDrawer : MonoBehaviour
     private void Awake()
     {
         rawImage = GetComponent<RawImage>();
-
-		sample = new float[audioSource.clip.samples * audioSource.clip.channels];
-		audioSource.clip.GetData(sample, 0);
     }
 
-    private void Start()
-    {
-        DrawAudioSpectrum(.0f, audioSource.clip.length);
-    }
-
-    private float[] GetSpectrum(float startTime, float endTime)
+    private float[] GetSpectrum(AudioSource audioSource, float startTime, float endTime)
 	{
 		if (startTime > endTime)
 			throw new Exception("startTime is bigger than endTime");
 
 		// Easy to use
 		AudioClip audio = audioSource.clip;
+
+		int sampleSize = audio.samples * audio.channels;
         int width = (int)rawImage.rectTransform.rect.width;
         int height = (int)rawImage.rectTransform.rect.height;
 
-		//Section
-		int sampleSize = audio.samples * audio.channels;
-		int startIndex = (int)(startTime / audio.length * sampleSize); //이상
+        sample = new float[sampleSize];
+        audioSource.clip.GetData(sample, 0);
+
+        //Section
+        int startIndex = (int)(startTime / audio.length * sampleSize); //이상
 		int endIndex = (int)(endTime / audio.length * sampleSize); //초과 
 
 		int size = endIndex - startIndex;
@@ -49,14 +44,17 @@ public class SpectrumDrawer : MonoBehaviour
         {
             s = (int)(width * ((float)i / size));
 
-            if (waveform[s] < Mathf.Abs(sample[i+startIndex])) // Max value
+            if (i + startIndex >= sampleSize)
+                waveform[s] = 0;
+
+            else if (waveform[s] < Mathf.Abs(sample[i+startIndex])) // Max value
                 waveform[s] = Mathf.Abs(sample[i+startIndex]);
         }
 
 		return waveform;
     }
 
-	public void DrawAudioSpectrum(float startTime, float endTime)
+	public void DrawAudioSpectrum(AudioSource audioSource, float startTime, float endTime)
 	{
 
         int width = (int)rawImage.rectTransform.rect.width;
@@ -65,7 +63,7 @@ public class SpectrumDrawer : MonoBehaviour
         Texture2D tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
         tex.filterMode = FilterMode.Point;
 
-        float[] waveform = GetSpectrum(startTime, endTime);
+        float[] waveform = GetSpectrum(audioSource, startTime, endTime);
 
 		// Fill Background
 		for (int x = 0; x < width; x++)
