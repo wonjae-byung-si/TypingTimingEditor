@@ -8,11 +8,11 @@ public class AudioHandler : MonoBehaviour
     public AudioInfoHandler audioInfoHandler;
     public SpectrumDrawer spectrumDrawer;
 
-    public int beatInSection = 12;
+    private readonly int BEATINSECTION = 12;
     private int bpm = 100;
 
     private float TimePerBeat => 60.0f / bpm;
-    private float SectionSize => TimePerBeat * beatInSection;
+    private float SectionSize => TimePerBeat * BEATINSECTION;
     private int CurrentSection => (int)(audioSource.time / SectionSize);
 
 
@@ -23,25 +23,28 @@ public class AudioHandler : MonoBehaviour
         //Audio Info
         audioInfoHandler.UIName = audioSource.clip.name;
 
-        audioInfoHandler.audioSourcePlayButton.onClick.AddListener(() =>
-        {
-            if (audioSource.isPlaying)
-            {
-                audioSource.Pause();
-            }
-            else
-            {
-                audioSource.Play();
-                audioInfoHandler.UIButtonImage = true;
-                StartCoroutine("OnAudioSourcePlaying");
-            }
-        });
+        audioInfoHandler.audioSourcePlayButton.onClick.AddListener(ToggleAudioSource);
+        audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener(ChangeBPM);
+    }
 
-        audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener( (string value/*응 안 써*/) =>
+    private void ToggleAudioSource()
+    {
+        if (audioSource.isPlaying)
         {
-            bpm = audioInfoHandler.BPM;
-            ResetSpectrum();
-        });
+            audioSource.Pause();
+        }
+        else
+        {
+            audioSource.Play();
+            audioInfoHandler.UIButtonImage = true;
+            StartCoroutine("OnAudioSourcePlaying");
+        }
+    }
+
+    private void ChangeBPM(string value/*응 안 써*/)
+    {
+        bpm = audioInfoHandler.BPM;
+        ResetSpectrum();
     }
 
     private void ResetSpectrum()
