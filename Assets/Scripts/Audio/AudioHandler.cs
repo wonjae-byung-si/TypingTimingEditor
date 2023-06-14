@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class AudioHandler : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioInfoHandler audioInfoHandler;
     public SpectrumDrawer spectrumDrawer;
+    public NoteMapHandler noteMapHandler;
 
     private readonly int BEATINSECTION = 12;
     private int bpm = 100;
@@ -14,7 +17,6 @@ public class AudioHandler : MonoBehaviour
     private float TimePerBeat => 60.0f / bpm;
     private float SectionSize => TimePerBeat * BEATINSECTION;
     private int CurrentSection => (int)(audioSource.time / SectionSize);
-
 
     private void Start()
     {
@@ -25,6 +27,24 @@ public class AudioHandler : MonoBehaviour
 
         audioInfoHandler.audioSourcePlayButton.onClick.AddListener(ToggleAudioSource);
         audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener(ChangeBPM);
+        audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener(ResetNoteMap);
+        audioInfoHandler.audioSourceScrollBar.onValueChanged.AddListener((float value) =>
+        {
+            audioSource.time = audioSource.clip.length * value;
+            ResetSpectrum();
+        });
+    }
+
+    private void Update()
+    {
+        foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(keyCode))
+            {
+                noteMapHandler.AddNote(audioSource.time, keyCode);
+                ResetNoteMap(null);
+            }
+        }
     }
 
     private void ToggleAudioSource()
@@ -49,7 +69,6 @@ public class AudioHandler : MonoBehaviour
 
     private void ResetSpectrum()
     {
-        Debug.Log(CurrentSection);
         spectrumDrawer.DrawAudioSpectrum(audioSource, CurrentSection * SectionSize, CurrentSection * SectionSize + SectionSize);
     }
 
@@ -69,5 +88,10 @@ public class AudioHandler : MonoBehaviour
         //Pause
         audioInfoHandler.UIButtonImage = false;
         ResetSpectrum();
+    }
+
+    private void ResetNoteMap(string value/*응 안써*/)
+    {
+        noteMapHandler.ResetNoteMap(CurrentSection * SectionSize, CurrentSection * SectionSize + SectionSize);
     }
 }

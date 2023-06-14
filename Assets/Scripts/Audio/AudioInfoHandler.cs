@@ -11,6 +11,7 @@ public class AudioInfoHandler : MonoBehaviour
     public Button audioSourcePlayButton;
     public TMP_InputField audioSourceBPMInputField;
     public Button audioSourceImportButton;
+    public Scrollbar audioSourceScrollBar;
     //public for add event listener
 
     private Sprite playingSprite;
@@ -56,5 +57,10 @@ public class AudioInfoHandler : MonoBehaviour
 
             return result;
         }
+    }
+
+    public float ScrollbarValue
+    {
+        get => audioSourceScrollBar.value;
     }
 }
