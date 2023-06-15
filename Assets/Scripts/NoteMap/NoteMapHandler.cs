@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class NoteMapHandler : MonoBehaviour
 {
 	GameObject noteAsset;
-	[SerializeField] Button noteMap;
-	[SerializeField] List<Note> noteList;
-	[SerializeField] KeyArray keyArray;
+	public Button noteMap;
+	public List<Note> noteList;
+	public KeyArray keyArray;
+	public NoteInfoHandler noteInfoHandler;
 
 	private void Awake()
 	{
@@ -25,6 +26,19 @@ public class NoteMapHandler : MonoBehaviour
 		noteList.Sort();
 		if (noteList.BinarySearch(note) < 0)
 			noteList.Add(note);
+	}
+	
+	public void DeleteAllNotes()
+	{
+		noteList = new List<Note>();
+	}
+
+	public void DeleteCurrentNote()
+	{
+		Note note = noteInfoHandler.currentNote;
+		noteList.RemoveAll(n => n.time == note.time);
+
+		noteInfoHandler.currentNote = null;
 	}
 
 	public void ResetNoteMap(float startTime, float endTime)
@@ -52,9 +66,10 @@ public class NoteMapHandler : MonoBehaviour
 				float y = 0;
 
 				noteObj.transform.localPosition = new Vector2(x, y);
-				noteObj.GetComponent<Button>().onClick.AddListener(()=>{
-					Debug.Log("Click");
-					NoteInfoHandler.GetInstance().ChangeCurrentNote(note);
+				noteObj.name = i.ToString();
+				Debug.Log(noteObj.GetComponent<Button>());
+				noteObj.GetComponent<Button>().onClick.AddListener(() => {
+					noteInfoHandler.ChangeCurrentNote(note);
 				});
 			}
 		}

@@ -56,5 +56,10 @@ public class AudioInfoHandler : MonoBehaviour
 
             return result;
         }
+
+        set
+        {
+            audioSourceBPMInputField.text = value.ToString();
+        }
     }
 }

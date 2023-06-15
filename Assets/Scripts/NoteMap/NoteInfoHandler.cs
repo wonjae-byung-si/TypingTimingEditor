@@ -6,21 +6,24 @@ using TMPro;
 
 public class NoteInfoHandler : Singleton<NoteInfoHandler>
 {
-    Note currentNote = null;
+    public Note currentNote = null;
 
-    [SerializeField] TMP_InputField timeInputField;
+    public TMP_InputField timeInputField;
     [SerializeField] TMP_Dropdown typeDropdown;
     [SerializeField] TMP_Dropdown languageDropdown;
     [SerializeField] TextMeshProUGUI keycodeText;
-
+    public Button deleteAllNotesButton;
+    public Button deleteNoteButton;
 
     protected override void Awake()
     {
         base.Awake();
 
         timeInputField.onEndEdit.AddListener((string value) => {
-            float time;
+            if(currentNote == null) return;
 
+
+            float time;
             if(!float.TryParse(value, out time))
             {
                 time = currentNote.time;
@@ -56,7 +59,6 @@ public class NoteInfoHandler : Singleton<NoteInfoHandler>
         if(currentNote == note) return;
         currentNote = note;
 
-        Debug.Log(note.keyCode);
         UpdateNoteUI();
     }
     
@@ -90,8 +92,12 @@ public class NoteInfoHandler : Singleton<NoteInfoHandler>
     }
 
     private void UpdateKeycode(){
-        if(currentNote == null) return;
+        if(currentNote == null)
+        {
+            keycodeText.text = "Not Selected";
+            return;
+        }
 
-        keycodeText.text = currentNote.ToString();
+        keycodeText.text = currentNote.keyCode.ToString();
     }
 }
