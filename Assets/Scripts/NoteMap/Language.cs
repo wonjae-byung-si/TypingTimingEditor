@@ -1,5 +1,5 @@
 public enum Language
 {
-    English,
     Korean,
+    English,
 }
