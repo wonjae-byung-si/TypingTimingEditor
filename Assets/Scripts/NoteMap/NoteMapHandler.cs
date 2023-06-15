@@ -52,6 +52,10 @@ public class NoteMapHandler : MonoBehaviour
 				float y = 0;
 
 				noteObj.transform.localPosition = new Vector2(x, y);
+				noteObj.GetComponent<Button>().onClick.AddListener(()=>{
+					Debug.Log("Click");
+					NoteInfoHandler.GetInstance().ChangeCurrentNote(note);
+				});
 			}
 		}
 	}

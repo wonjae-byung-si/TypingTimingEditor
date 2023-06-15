@@ -34,7 +34,7 @@ public class AudioHandler : MonoBehaviour
                 string path = FileHandler.FileExplorerOpen("mp3");
                 if(path == "") return;
 
-                StartCoroutine(ImportAudioClip(path)); 
+                StartCoroutine(ImportAudioClip(path));
             }
         );
     }
@@ -50,8 +50,6 @@ public class AudioHandler : MonoBehaviour
 
                 float offset = (int)Mathf.Round(audioSource.time / TimePerBeat);
                 float time = Mathf.Min(offset * TimePerBeat, audioSource.clip.length);
-                Debug.Log(audioSource.time + " " + time); //TODO: Remove later
-
 
                 noteMapHandler.AddNote(time, keyCode);
                 ResetNoteMap();
@@ -92,6 +90,7 @@ public class AudioHandler : MonoBehaviour
         //Pause
         audioInfoHandler.UIButtonImage = false;
         ResetSpectrum();
+        ResetNoteMap();
     }
 
     private void UpdateBPM(string value/*응 안 써*/)
@@ -126,6 +125,7 @@ public class AudioHandler : MonoBehaviour
         audioSource.clip.name = audioClip.name;
 
         audioSource.time = 0f;
+        audioInfoHandler.UIName = audioSource.clip.name;
         ResetSpectrum();
         ResetNoteMap();
     }
