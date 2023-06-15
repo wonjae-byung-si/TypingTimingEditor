@@ -29,7 +29,14 @@ public class AudioHandler : MonoBehaviour
         audioInfoHandler.audioSourcePlayButton.onClick.AddListener(ToggleAudioSource);
         audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener(UpdateBPM);
         audioInfoHandler.audioSourceBPMInputField.onEndEdit.AddListener(ResetNoteMap);
-        audioInfoHandler.audioSourceImportButton.onClick.AddListener(() => { StartCoroutine(ImportAudioClip(FileHandler.FileExplorerOpen("mp3"))); });
+        audioInfoHandler.audioSourceImportButton.onClick.AddListener(
+            () => {
+                string path = FileHandler.FileExplorerOpen("mp3");
+                if(path == "") return;
+
+                StartCoroutine(ImportAudioClip(path)); 
+            }
+        );
     }
 
     private void Update()
