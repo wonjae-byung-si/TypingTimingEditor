@@ -7,7 +7,7 @@ public class NoteMapHandler : MonoBehaviour
 {
 	GameObject noteAsset;
 	[SerializeField] Button noteMap;
-	List<Note> noteList;
+	[SerializeField] List<Note> noteList;
 	[SerializeField] KeyArray keyArray;
 
 	private void Awake()
@@ -20,8 +20,11 @@ public class NoteMapHandler : MonoBehaviour
 	{
 		if (!keyArray.Has(keyCode)) return;
 
+
 		Note note = new Note(time, keyCode);
-		noteList.Add(note);
+		noteList.Sort();
+		if (noteList.BinarySearch(note) < 0)
+			noteList.Add(note);
 	}
 
 	public void ResetNoteMap(float startTime, float endTime)
@@ -37,15 +40,17 @@ public class NoteMapHandler : MonoBehaviour
         float width = rect.width;
 		float height = rect.height;
 
-		//Sort
-		foreach(var note in noteList)
+		
+		for(int i = 0; i < noteList.Count; i++)
 		{
+			Note note = noteList[i];
 			if(note.time >= startTime && note.time <= endTime)
 			{
 				GameObject noteObj = Instantiate(noteAsset, noteMap.transform);
 
 				float x = ((note.time - startTime) / (endTime - startTime) * width) - width/2;
 				float y = 0;
+
 				noteObj.transform.localPosition = new Vector2(x, y);
 			}
 		}

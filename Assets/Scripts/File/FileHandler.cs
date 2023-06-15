@@ -3,16 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using SFB;
 
-public class FileHandler : MonoBehaviour
+public class FileHandler
 {
-	private string FileExplorerSave()
+	public static string FileExplorerSave(string fileType)
 	{
-		return EditorUtility.SaveFilePanel("Select directory to save file", ".", "level", ".typm");
+//#if UNITY_EDITOR
+		//return EditorUtility.SaveFilePanel("Select directory to save file", ".", "level", fileType);
+//#else
+		return StandaloneFileBrowser.SaveFilePanel("Select directory to save file", ".", "level", fileType);
+//#endif
 	}
 
-	private string FileExplorerOpen()
+	public static string FileExplorerOpen(string fileType)
 	{
-		return EditorUtility.OpenFilePanel("Select file to open", ".", ".typm");
-	}
+//#if UNITY_EDITOR
+        //return EditorUtility.OpenFilePanel("Select file to open", ".", fileType);
+//#else
+		return StandaloneFileBrowser.OpenFilePanel("Select file to open", ".", fileType, false)[0];
+//#endif
+    }
 }
