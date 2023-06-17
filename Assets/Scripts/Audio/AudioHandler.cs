@@ -89,6 +89,8 @@ public class AudioHandler : MonoBehaviour
                     i++;
                 }
             }
+
+            ResetNoteMap();
         });
 
     
