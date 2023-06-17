@@ -70,7 +70,8 @@ public class AudioHandler : MonoBehaviour
             int i = 0;
             foreach(string l in lyrics)
             {
-                foreach(char c in l)
+                string lower = l.ToLower();
+                foreach(char c in lower)
                 {
                     if (c == ' ') continue;
                     noteMapHandler.AddNote(TimePerBeat * i, CharToKeycode.chartoKeycode[c]);
