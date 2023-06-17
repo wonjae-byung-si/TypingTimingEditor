@@ -14,6 +14,7 @@ public class NoteInfoHandler : Singleton<NoteInfoHandler>
     [SerializeField] TextMeshProUGUI keycodeText;
     public Button deleteAllNotesButton;
     public Button deleteNoteButton;
+    public Button importLyricsButton;
 
     protected override void Awake()
     {

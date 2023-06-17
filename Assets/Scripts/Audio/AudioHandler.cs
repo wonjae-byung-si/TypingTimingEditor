@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.IO;
 
 public class AudioHandler : MonoBehaviour
 {
@@ -57,6 +57,28 @@ public class AudioHandler : MonoBehaviour
         noteMapHandler.noteInfoHandler.timeInputField.onEndEdit.AddListener((string value) =>{
             ResetNoteMap();
         });
+
+        noteMapHandler.noteInfoHandler.importLyricsButton.onClick.AddListener(() =>
+        {
+            string path = FileHandler.FileExplorerOpen("txt");
+            if (path == "") return;
+
+            string[] lyrics = File.ReadAllLines(path);
+
+
+            noteMapHandler.DeleteAllNotes();
+            int i = 0;
+            foreach(string l in lyrics)
+            {
+                foreach(char c in l)
+                {
+                    if (c == ' ') continue;
+                    noteMapHandler.AddNote(TimePerBeat * i, CharToKeycode.chartoKeycode[c]);
+                    i++;
+                }
+            }
+        });
+
     
         //Save Load
         jsonDataFile = new JsonDataFile();
