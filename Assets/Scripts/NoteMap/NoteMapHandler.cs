@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,6 +72,7 @@ public class NoteMapHandler : MonoBehaviour
 				noteObj.GetComponent<Button>().onClick.AddListener(() => {
 					noteInfoHandler.ChangeCurrentNote(note);
 				});
+				noteObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = note.keyCode.ToString();
 			}
 		}
 	}
