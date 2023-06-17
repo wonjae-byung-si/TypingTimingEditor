@@ -6,23 +6,27 @@ using UnityEngine;
 
 public class JsonDataFile
 {
-    public string path;
+    public string path = "";
+
+    public void ChangePath()
+    {
+        string newPath = FileHandler.FileExplorerSave("json");
+        if(newPath == "") return;
+
+        path = newPath;
+    }
 
     public void Save(int bpm, List<Note> data)
     {
 
         FileStream fileStream;
-        if(path == null){
+        if (path == "") {
             path = FileHandler.FileExplorerSave("json");
             fileStream = File.Create(path);
             fileStream.Close();
         }
 
-        // using(FileStream fileStream = File.OpenWrite(path))
-        NoteDB notes = new NoteDB();
-        notes.bpm = bpm;
-        notes.data = data;
-
+        NoteDB notes = new NoteDB { bpm = bpm, data = data };
         string str = JsonUtility.ToJson(notes);
 
         File.WriteAllText(path, str);
