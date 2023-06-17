@@ -1283,6 +1283,7 @@ MonoBehaviour:
   keycodeText: {fileID: 2107274560}
   deleteAllNotesButton: {fileID: 1368100765}
   deleteNoteButton: {fileID: 438869058}
+  importLyricsButton: {fileID: 695992632}
 --- !u!1 &665495367
 GameObject:
   m_ObjectHideFlags: 0
