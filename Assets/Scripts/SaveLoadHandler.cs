@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class SaveLoadHandler : MonoBehaviour
 {
+    public Button change;
     public Button save;
     public Button load;
 }

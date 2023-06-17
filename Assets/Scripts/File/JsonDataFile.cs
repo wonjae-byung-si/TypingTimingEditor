@@ -3,6 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO.Pipes;
 
 public class JsonDataFile
 {
@@ -13,17 +14,17 @@ public class JsonDataFile
         string newPath = FileHandler.FileExplorerSave("json");
         if(newPath == "") return;
 
+        File.Create(path).Close();
         path = newPath;
     }
 
     public void Save(int bpm, List<Note> data)
     {
 
-        FileStream fileStream;
         if (path == "") {
             path = FileHandler.FileExplorerSave("json");
-            fileStream = File.Create(path);
-            fileStream.Close();
+            if (path == "") return;
+            File.Create(path).Close();
         }
 
         NoteDB notes = new NoteDB { bpm = bpm, data = data };

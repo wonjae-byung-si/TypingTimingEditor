@@ -76,6 +76,8 @@ public class AudioHandler : MonoBehaviour
             ResetNoteMap();
             UpdateBar();
         });
+
+        saveLoadHandler.change.onClick.AddListener(jsonDataFile.ChangePath);
     }
 
     private void Update()
