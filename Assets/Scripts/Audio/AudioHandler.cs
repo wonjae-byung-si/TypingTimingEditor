@@ -67,6 +67,17 @@ public class AudioHandler : MonoBehaviour
 
 
             noteMapHandler.DeleteAllNotes();
+
+            int size = 0;
+            foreach (string l in lyrics)
+            {
+                foreach (char c in l)
+                {
+                    if (c == ' ') continue;
+                    size++;
+                }
+            }
+
             int i = 0;
             foreach(string l in lyrics)
             {
@@ -74,7 +85,7 @@ public class AudioHandler : MonoBehaviour
                 foreach(char c in lower)
                 {
                     if (c == ' ') continue;
-                    noteMapHandler.AddNote(TimePerBeat * i, CharToKeycode.chartoKeycode[c]);
+                    noteMapHandler.AddNote( (audioSource.clip.length/size) * i, CharToKeycode.chartoKeycode[c]);
                     i++;
                 }
             }
